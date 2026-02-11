@@ -1,0 +1,32 @@
+{
+  "name": "cypress-e2e-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "env": {
+    "NO_PROXY": "localhost,pepito.com"
+  },
+  "scripts": {
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "cy:run:chrome": "cypress run -b chrome -- --headless --spec",
+    "cy:run:firefox": "cypress run -b firefox",
+    "report:merge": "mochawesome-merge cypress/reports/mochawesome/*.json > cypress/reports/report.json",
+    "report:generate": "marge cypress/reports/report.json -f report -o cypress/reports",
+    "test:report": "npm run cy:run && npm run report:merge && npm run report:generate"
+  },
+  "keywords": [],
+  "author": "Leslie Liseth Morales Casseres",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@faker-js/faker": "^10.3.0",
+    "axe-core": "^4.11.1",
+    "cypress": "^13.7.3",
+    "cypress-axe": "^1.7.0",
+    "cypress-xpath": "^2.0.1",
+    "mochawesome": "^7.1.4",
+    "mochawesome-merge": "^5.1.1",
+    "mochawesome-report-generator": "^6.3.2"
+  }
+}
