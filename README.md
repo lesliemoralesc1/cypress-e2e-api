@@ -909,43 +909,41 @@ pipeline {
 ```yaml
 name: Cypress Tests
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  test:
+  cypress-run:
     runs-on: ubuntu-latest
-    
+
     steps:
-      - uses: actions/checkout@v2
-      
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
       - name: Install dependencies
-        run: npm install
-      
+        run: npm ci
+
       - name: Run Cypress tests
         run: npm run cy:run
-      
-      - name: Generate reports
+
+      - name: Upload test artifacts
         if: always()
-        run: npm run report:merge && npm run report:generate
-      
-      - name: Upload artifacts
-        if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: cypress-artifacts
-          path: cypress/screenshots,cypress/videos,cypress/reports
-      
-      - name: Comment PR with results
-        if: github.event_name == 'pull_request'
-        uses: actions/github-script@v6
-        with:
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: '✅ Test execution completed. [View Report](actions/runs/${{ github.run_id }})'
-            })
+          path: |
+            cypress/screenshots
+            cypress/videos
+            cypress/reports
 ```
 
 ### GitLab CI Integration
